@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      div { margin-left: 1em }
+input[type='radio'] ~ div { display: none }
+input[type='radio']:checked ~ div { display: block }
+    </style>
+    <script>
+      window.addEventListener('DOMContentLoaded', () =>{
+        const activeActivation = document.querySelector('button.active')
+for(node of document.querySelectorAll('.active input')){
+ node.addEventListener('change', () => 
+   activeActivation.removeAttribute('disabled'))
+}
+activeActivation.addEventListener('click', () => 
+  activeActivation.setAttribute('disabled', ''))
+
+const reactiveActivation = document.querySelector('button.reactive')
+for(node of document.querySelectorAll('.reactive input')){
+ node.addEventListener('change', () => 
+   reactiveActivation.removeAttribute('disabled'))
+}
+reactiveActivation.addEventListener('click', () => 
+  reactiveActivation.setAttribute('disabled', ''))
+  
+const currentTime = document.querySelector('legend.currentTime')
+window.setInterval(
+	() => currentTime.innerHTML = '' + new Date(),
+  1000)
+  
+const softStopCheck = document.querySelector('#softStop')
+const softStopText = document.querySelector('div.softStop')
+softStopCheck.addEventListener('change', () => {
+	if (!softStopCheck.checked)
+    softStopText.setAttribute('hidden', '')
+  else softStopText.removeAttribute('hidden')
+})
+      })
+    </script>
+  </head>
+  <body>
+      <fieldset>
+          <legend>backend mock</legend>
+          <input id='softStop' type='checkbox'>
+          <label for='softStop'>Soft stop</label>
+        </fieldset>
+        <h1>Plant Control</h1>
+        <fieldset class='active'>
+          <legend>Active Power</legend>
+          <div>
+            <input checked id='activeLocalRadio' name='activeRadio' type='radio'>
+            <label for='activeLocalRadio'>Local</label>
+            <div>
+              <input checked id='activeLocalNoneRadio' name='activeLocalRadio' type='radio'>
+              <label for='activeLocalNoneRadio'>No curtailment</label>
+            </div>
+            <div>
+              <input checked id='activeLocalPowerRadio' name='activeLocalRadio' type='radio'>
+              <label for='activeLocalPower'>Power</label>
+              <input id='activeLocalPower' type='text' value='365'>
+              <label for='activeLocalPower'>W,</label>
+              <label for='activeLocalCT'>curtailment time</label>
+              <input id='activeLocalCT' type='text' value='10'>
+              <label for='activeLocalCT'>s</label>
+            </div>
+          </div>
+          <div>
+            <input id='activeRemoteRadio' name='activeRadio' type='radio'>
+            <label for='activeRemoteRadio'>Remote</label>
+            <div>
+              <em>CIPU</em>
+              wants power to be 465kW, with a curtailment time of 53s.
+            </div>
+          </div>
+          <button class='active' disabled>Activate</button>
+        </fieldset>
+        <fieldset class='reactive'>
+          <legend>Reactive Power</legend>
+          <div>
+            <input checked id='reactiveLocalRadio' name='reactiveRadio' type='radio'>
+            <label for='reactiveLocalRadio'>Local</label>
+            <div>
+              <input id='reactiveLocalRadioNone' name='reactiveLocalRadio' type='radio'>
+              <label for='reactiveLocalRadioNone'>No reactive power control</label>
+            </div>
+            <div>
+              <input checked id='reactiveLocalAVCRadio' name='reactiveLocalRadio' type='radio'>
+              <label for='reactiveLocalAVCRadio'>Local automatic voltage control,</label>
+              <label for='reactiveLocalSetPoint'>set point</label>
+              <input id='reactiveLocalSetPoint' type='text' value='220'>
+              <label for='reactiveLocalSetPoint'>V</label>
+            </div>
+          </div>
+          <div>
+            <input id='reactiveRemoteRadio' name='reactiveRadio' type='radio'>
+            <label for='reactiveRemoteRadio'>Remote</label>
+            <div>
+              <em>ELIA</em>
+              wants automatic voltage control.
+            </div>
+          </div>
+          <button class='reactive' disabled>Activate</button>
+        </fieldset>
+        <fieldset>
+          <legend class='currentTime'>
+            <script>document.writeln(new Date())</script>
+          </legend>
+          <div class='softStop' hidden>
+            <strong>Soft stop is currently active!</strong>
+          </div>
+          <div>
+            10 minutes ago,
+            <em>Bert</em>
+            did set power to 365W with a curtailment time of 10s
+          </div>
+          <div>
+            15 minutes ago,
+            <em>Bert</em>
+            did enable automatic voltage control with a set point of 220V
+          </div>
+          <div>
+            <strong>Not active:</strong>
+            <em>CIPU</em>
+            wants power to be 465kW, with a curtailment time of 53s
+          </div>
+          <div>
+            <strong>Not active:</strong>
+            <em>ELIA</em>
+            wants automatic voltage control
+          </div>
+        </fieldset>
+  </body>
+</html>
